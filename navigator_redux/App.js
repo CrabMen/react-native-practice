@@ -6,7 +6,7 @@
  * @flow
  */
 import React from 'react';
-import {AppNavigator, BottomTabNavigator} from './js/AppNavigator';
+import {AppNavigator, BottomTabNavigator} from './js/Navigator/AppNavigator';
 import {createAppContainer} from 'react-navigation';
 import {
   SafeAreaView,
@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default createAppContainer(AppNavigator);
+export default App;

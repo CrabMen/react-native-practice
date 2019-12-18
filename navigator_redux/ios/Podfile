@@ -1,7 +1,10 @@
+source 'https://cdn.cocoapods.org/'
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'navigator_redux' do
+  project 'navigator_redux.xcodeproj'
+
   # Pods for navigator_redux
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
@@ -42,12 +45,12 @@ target 'navigator_redux' do
   use_native_modules!
 end
 
-target 'navigator_redux-tvOS' do
-  # Pods for navigator_redux-tvOS
+# target 'navigator_redux-tvOS' do
+#   # Pods for navigator_redux-tvOS
 
-  target 'navigator_redux-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+#   target 'navigator_redux-tvOSTests' do
+#     inherit! :search_paths
+#     # Pods for testing
+#   end
 
-end
+# end
