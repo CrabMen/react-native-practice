@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MinePage from '../page/MinePage';
 import HomePage from '../page/HomePage';
 import WelcomePage from '../page/WelcomePage';
+import DetailPage from '../page/DetailPage';
 
 const InitNavigator = createStackNavigator({
   WelcomePage: {
@@ -23,6 +24,13 @@ const MainNavigator = createStackNavigator({
     navigationOptions: {
       title: '首页',
       header: null,
+    },
+  },
+
+  DetailPage: {
+    screen: DetailPage,
+    navigationOptions: {
+      title: '详情页',
     },
   },
 });

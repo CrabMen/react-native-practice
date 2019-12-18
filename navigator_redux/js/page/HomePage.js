@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, Button} from 'react-native';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import DynamicTabNavigator from '../Navigator/DynamicTabNavigator';
+import NavigationUtil from '../Navigator/NavigationUtil';
 
 class HomePage extends PureComponent {
   constructor(props) {
@@ -20,7 +21,7 @@ class HomePage extends PureComponent {
   render() {
     // const {navigation} = this.props;
     // const Tab = this._tabNavigator();
-
+    NavigationUtil.navigation = this.props.navigation;
     return <DynamicTabNavigator />;
   }
 }
