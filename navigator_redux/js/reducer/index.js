@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import theme from './theme';
+import theme from './theme/theme';
 /**
  * 合并reducer
  */

@@ -5,3 +5,4 @@ import reducers from '../reducer';
 const middlewares = [thunk];
 
 export default createStore(reducers, applyMiddleware(...middlewares));
+ 
