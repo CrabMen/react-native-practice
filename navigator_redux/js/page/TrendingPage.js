@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
 import {connect} from 'react-redux';
-import {actions} from '../action';
+import actions from '../action';
  class TrendingPage extends Component {
   render() {
     const {navigation} = this.props;
@@ -17,7 +17,7 @@ import {actions} from '../action';
             //     updateTime: new Date().getTime(),
             //   },
             // })
-            this.props.onThemeChange('orange')
+            this.props.onThemeChange('red')
           }
         />
       </View>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const  mapDispatchToProps = dispatch=>({
+const mapDispatchToProps = dispatch=>({
   onThemeChange:theme=>dispatch(actions.onThemeChange(theme))
 })
 export default connect(null,mapDispatchToProps)(TrendingPage)

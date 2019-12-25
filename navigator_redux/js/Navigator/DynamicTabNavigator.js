@@ -76,8 +76,7 @@ const TABS = {
   }
 
   render() {
-    const Tab = this._tabNavigator();
-
+    const Tab =createAppContainer(this._tabNavigator());
     return <Tab />;
   }
 }
@@ -85,21 +84,21 @@ const TABS = {
 class TabBarComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.theme = {
-      tintColor: props.activeTintColor,
-      updateTime: new Date().getTime(),
-    };
+    // this.theme = {
+    //   tintColor: props.activeTintColor,
+    //   updateTime: new Date().getTime(),
+    // };
   }
 
   render() {
-    const {routes, index} = this.props.navigation.state;
-    if (routes[index].params) {
-      const {theme} = routes[index].params;
-      //以最新的更新时间为主,防止被其他的tab覆盖
-      if (theme && theme.updateTime > this.theme.updateTime) {
-        this.theme = theme;
-      }
-    }
+    // const {routes, index} = this.props.navigation.state;
+    // if (routes[index].params) {
+    //   const {theme} = routes[index].params;
+    //   //以最新的更新时间为主,防止被其他的tab覆盖
+    //   if (theme && theme.updateTime > this.theme.updateTime) {
+    //     this.theme = theme;
+    //   }
+    // }
 
     return (
       <BottomTabBar

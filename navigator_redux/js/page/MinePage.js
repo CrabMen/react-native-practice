@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
-
-export default class MinePage extends Component {
+import {connect} from 'react-redux';
+import actions from '../action';
+ class MinePage extends Component {
   render() {
     const {navigation} = this.props;
 
@@ -10,14 +11,15 @@ export default class MinePage extends Component {
         <Text>MinePage</Text>
         <Button
           title={'主题'}
-          onPress={() =>
-            navigation.setParams({
-              theme: {
-                tintColor: 'pink',
-                updateTime: new Date().getTime(),
-              },
-            })
-          }
+          // onPress={() =>
+          //   navigation.setParams({
+          //     theme: {
+          //       tintColor: 'pink',
+          //       updateTime: new Date().getTime(),
+          //     },
+          //   })
+          // }
+          onPress={()=>this.props.onThemeChange('#539')}
         />
       </View>
     );
@@ -31,3 +33,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+const mapDispatchToProps=dispatch=>({
+  onThemeChange:theme=>dispatch(actions.onThemeChange(theme))
+})
+
+export default connect(null,mapDispatchToProps)(MinePage)
