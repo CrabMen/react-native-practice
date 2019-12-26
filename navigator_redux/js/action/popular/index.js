@@ -4,7 +4,7 @@ import DataStore from '../../expand/DataStore';
 export function onLoadPopularData(storeName, url) {
 
     return dispatch => {
-        dispatch({ type: Types.POPULAR_REFRESH, storeName, url })
+        dispatch({ type: Types.POPULAR_REFRESH, storeName:storeName })
 
         let dataSource = new DataStore()
 
@@ -16,7 +16,8 @@ export function onLoadPopularData(storeName, url) {
                 console.log(error)
                 dispatch({
                     type: Types.LOAD_POPULAR_SUCCESS,
-                    storeName
+                    storeName,
+                    error 
                 });
             });
     }
@@ -29,6 +30,5 @@ function handleData(dispatch, storeName, data) {
         type: Types.LOAD_POPULAR_SUCCESS,
         items: data && data.data && data.data.items,
         storeName
-
     })
 } 
