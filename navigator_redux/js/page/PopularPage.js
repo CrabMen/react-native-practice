@@ -5,6 +5,7 @@ import { createAppContainer, ThemeColors } from 'react-navigation';
 import NavigationUtil from '../Navigator/NavigationUtil';
 import { connect } from 'react-redux';
 import actions from '../action';
+import PopularItem from '../common/PopularItem';
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
 const THEME_COLOR = 'red';
@@ -84,14 +85,14 @@ class PopularTab extends Component {
   }
 
   renderItem(data) {
-    const item = data.item
-    return <View style={{ marginBottom: 10 }}>
-      <Text style={{ backgroundColor: '#faa' }}>
-        {JSON.stringify(item)}
-      </Text>
-    </View>
+    const item = data.item;
+    return <PopularItem
+        item={item}
+        onSelect={() => {
 
-  }
+        }}
+    />
+}
 
   render() {
     let { popular } = this.props
