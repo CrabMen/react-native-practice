@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, ShadowPropTypesIOS, RefreshControl } from 'react-native';
+import { FlatList, StyleSheet, Text, View, ShadowPropTypesIOS, RefreshControl, Button } from 'react-native';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer, ThemeColors } from 'react-navigation';
 import NavigationUtil from '../Navigator/NavigationUtil';
 import { connect } from 'react-redux';
 import actions from '../action';
-
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
 const THEME_COLOR = 'red';
@@ -39,7 +38,7 @@ export default class PopularPage extends Component {
 
   render() {
 
-    const TopTabNavigator = 
+    const TopTabNavigator = createAppContainer(
       createMaterialTopTabNavigator(this._generateTabs(), {
         tabBarOptions: {
           tabStyle: styles.tabStyle,
@@ -49,7 +48,8 @@ export default class PopularPage extends Component {
           indicatorStyle: styles.indicatorStyle,
           labelStyle: styles.labelStyle,
         },
-      });
+      }),
+    );
 
     return (
       <View style={styles.container}>
@@ -72,7 +72,7 @@ class PopularTab extends Component {
   }
 
   loadData() {
-    const {onLoadPopularData} = this.props
+    const { onLoadPopularData } = this.props
     const url = this.generateFetchUrl(this.storeName)
     onLoadPopularData(this.storeName, url)
 
@@ -85,8 +85,8 @@ class PopularTab extends Component {
 
   renderItem(data) {
     const item = data.item
-    return <View style={{marginBottom:10}}>
-      <Text style={{backgroundColor:'#faa'}}>
+    return <View style={{ marginBottom: 10 }}>
+      <Text style={{ backgroundColor: '#faa' }}>
         {JSON.stringify(item)}
       </Text>
     </View>
@@ -103,11 +103,10 @@ class PopularTab extends Component {
       }
     }
 
-
     return (
       <View style={styles.container}>
         <FlatList
-          data={state.items}
+          data={store.items}
           renderItem={data => this.renderItem(data)}
           keyExtractor={item=>""+item.id }
           refreshControl={
@@ -120,20 +119,20 @@ class PopularTab extends Component {
             tintColor={THEME_COLOR}
             />
           }
-        />
-
+        />      
       </View>
     );
   }
 }
 
 const mapStateToProps = state => ({
-    popular: state.popular
+  popular: state.popular
 });
 const mapDispatchToProps = dispatch => ({
-   onLoadPopularData: (storeName, url) => dispatch(actions.onLoadPopularData(storeName, url))
+  onLoadPopularData: (storeName, url) => dispatch(actions.onLoadPopularData(storeName, url))
 });
 const PopularTabPage = connect(mapStateToProps, mapDispatchToProps)(PopularTab)
+
 
 const styles = StyleSheet.create({
   container: {

@@ -7,6 +7,9 @@ import MinePage from '../page/MinePage';
 import HomePage from '../page/HomePage';
 import WelcomePage from '../page/WelcomePage';
 import DetailPage from '../page/DetailPage';
+import FetchDemoPage from '../page/FetchDemoPage';
+import AsynStorageDemoPage from '../page/AsynStorageDemoPage';
+import DataStoreDemoPage from '../page/DataStoreDemoPage';
 
 const InitNavigator = createStackNavigator({
   WelcomePage: {
@@ -27,12 +30,11 @@ const MainNavigator = createStackNavigator({
     },
   },
 
-  DetailPage: {
-    screen: DetailPage,
-    navigationOptions: {
-      title: '详情页',
-    },
-  },
+  DetailPage:DetailPage,
+  FetchDemoPage:FetchDemoPage,
+  AsynStorageDemoPage: AsynStorageDemoPage,
+  DataStoreDemoPage: DataStoreDemoPage,
+
 });
 
 export default createAppContainer(

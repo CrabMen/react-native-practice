@@ -1,5 +1,5 @@
 import Types from '../types';
-import DataStore from '../../expand/DataStore';
+import DataStore, { FLAG_STORAGE } from '../../expand/DataStore';
 
 export function onLoadPopularData(storeName, url) {
 
@@ -8,14 +8,14 @@ export function onLoadPopularData(storeName, url) {
 
         let dataSource = new DataStore()
 
-        dataSource.fetchData(url)
+        dataSource.fetchData(url,FLAG_STORAGE.flag_popular)
             .then(data => {
                 handleData(dispatch, storeName, data)
             })
             .catch(error => {
                 console.log(error)
                 dispatch({
-                    type: Types.LOAD_POPULAR_SUCCESS,
+                    type: Types.LOAD_POPULAR_FAIL,
                     storeName,
                     error 
                 });
@@ -25,6 +25,8 @@ export function onLoadPopularData(storeName, url) {
 }
 
 function handleData(dispatch, storeName, data) {
+
+    console.log('返会的数据为:'+JSON.stringify(data))
 
     dispatch({
         type: Types.LOAD_POPULAR_SUCCESS,

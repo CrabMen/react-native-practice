@@ -8,26 +8,25 @@ export default function onAction(state = defaultState, action) {
       return {
         ...state,
         [action.storeName]: {
-          ...[action.storeName],
+          ...state[action.storeName],
           items: action.items,
           isLoading: false,
         }
-
       }
     case Types.POPULAR_REFRESH:
+      //{type: "POPULAR_REFRESH", storeName: "Java"}
       return {
         ...state,
         [action.storeName]: {
-          ...[action.storeName],
+          ...state[action.storeName],
           isLoading: true,
         }
-
       }
     case Types.LOAD_POPULAR_FAIL:
       return {
         ...state,
         [action.storeName]: {
-          ...[action.storeName],
+          ...state[action.storeName],
           isLoading: false,
         }
 

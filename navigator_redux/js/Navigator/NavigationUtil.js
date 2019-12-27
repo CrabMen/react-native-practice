@@ -1,5 +1,19 @@
 export default class NavigationUtil {
-  static gotoPage(page, params = {}) {
+ 
+  static goPage(params,page){
+    const navigation = NavigationUtil.navigation
+    if(!navigation){
+        console.log('NavigationUtil.navigation can not be null')
+    }
+    navigation.navigate(
+        page,{
+            ...params
+        }
+    )
+}
+
+ 
+  static gotoPage(page,params = {}) {
     const {navigation} = NavigationUtil;
     if (!navigation) {
       console.log('NavigationUtil.navigation can not be null');
@@ -7,6 +21,11 @@ export default class NavigationUtil {
     }
 
     navigation.navigate(page, {...params});
+  }
+
+ 
+    static goBack(navigation) {
+      navigation.goBack();
   }
 
   static resetToHomePage(params) {

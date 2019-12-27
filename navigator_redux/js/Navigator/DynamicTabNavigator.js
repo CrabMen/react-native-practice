@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PopularPage from './../page/PopularPage';
 import TrendingPage from './../page/TrendingPage';
 import MinePage from './../page/MinePage';
@@ -6,16 +6,16 @@ import FavoritePage from './../page/FavoritePage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {createAppContainer} from 'react-navigation';
-import {createBottomTabNavigator, BottomTabBar} from 'react-navigation-tabs';
-import {connect} from 'react-redux';
+import { createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator, BottomTabBar } from 'react-navigation-tabs';
+import { connect } from 'react-redux';
 const TABS = {
   PopularPage: {
     screen: PopularPage,
     navigationOptions: {
       tabBarLabel: '最热',
-      tabBarIcon: ({tintColor, focused}) => (
-        <MaterialIcons name={'whatshot'} size={26} style={{color: tintColor}} />
+      tabBarIcon: ({ tintColor, focused }) => (
+        <MaterialIcons name={'whatshot'} size={26} style={{ color: tintColor }} />
       ),
     },
   },
@@ -23,11 +23,11 @@ const TABS = {
     screen: FavoritePage,
     navigationOptions: {
       tabBarLabel: '最爱',
-      tabBarIcon: ({tintColor, focused}) => (
+      tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons
           name={'md-trending-up'}
           size={26}
-          style={{color: tintColor}}
+          style={{ color: tintColor }}
         />
       ),
     },
@@ -37,8 +37,8 @@ const TABS = {
     screen: TrendingPage,
     navigationOptions: {
       tabBarLabel: '收藏',
-      tabBarIcon: ({tintColor, focused}) => (
-        <MaterialIcons name={'favorite'} size={26} style={{color: tintColor}} />
+      tabBarIcon: ({ tintColor, focused }) => (
+        <MaterialIcons name={'favorite'} size={26} style={{ color: tintColor }} />
       ),
     },
   },
@@ -47,36 +47,36 @@ const TABS = {
     screen: MinePage,
     navigationOptions: {
       tabBarLabel: '我的',
-      tabBarIcon: ({tintColor, focused}) => (
-        <Entypo name={'user'} size={26} style={{color: tintColor}} />
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Entypo name={'user'} size={26} style={{ color: tintColor }} />
       ),
     },
   },
 };
 
- class DynamicTabNavigator extends React.Component {
+class DynamicTabNavigator extends React.Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
   }
   _tabNavigator() {
-    if(this.tabs){return this.tabs}
-    const {PopularPage, TrendingPage, FavoritePage, MinePage} = TABS;
-    const tabs = {PopularPage, TrendingPage, FavoritePage, MinePage}; //根据需要定制显示的tab
+    if (this.tabs) { return this.tabs }
+    const { PopularPage, TrendingPage, FavoritePage, MinePage } = TABS;
+    const tabs = { PopularPage, TrendingPage, FavoritePage, MinePage }; //根据需要定制显示的tab
     PopularPage.navigationOptions.tabBarLabel = '最热啊'; //动态配置Tab属性
 
-    return createAppContainer(
-    this.tabs = createBottomTabNavigator(tabs, {
+    return this.tabs = createAppContainer(
+      createBottomTabNavigator(tabs, {
         // tabBarComponent: TabBarComponent,
-        tabBarComponent:props=>{
-          return <TabBarComponent  {...props} theme={this.props.theme}/>
+        tabBarComponent: props => {
+          return <TabBarComponent  {...props} theme={this.props.theme} />
         }
       }),
     );
   }
 
   render() {
-    const Tab =createAppContainer(this._tabNavigator());
+    const Tab = this._tabNavigator();
     return <Tab />;
   }
 }
@@ -109,7 +109,7 @@ class TabBarComponent extends React.Component {
   }
 }
 
-const mapStateToProps=state=>({
-  theme:state.theme.theme
+const mapStateToProps = state => ({
+  theme: state.theme.theme
 });
-export default  connect(mapStateToProps)(DynamicTabNavigator)
+export default connect(mapStateToProps)(DynamicTabNavigator)

@@ -1,12 +1,14 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, View, Button} from 'react-native';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { connect } from 'react-redux';
 import actions from '../action';
- class MinePage extends Component {
+import NavigationUtil from '../Navigator/NavigationUtil';
+class MinePage extends Component {
   render() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
 
     return (
+
       <View style={styles.container}>
         <Text>MinePage</Text>
         <Button
@@ -19,8 +21,31 @@ import actions from '../action';
           //     },
           //   })
           // }
-          onPress={()=>this.props.onThemeChange('#539')}
+          onPress={() => this.props.onThemeChange('#539')}
         />
+
+        <Button
+          title={"Fetch 使用"}
+          onPress={() => 
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+            }, "FetchDemoPage")
+          } />
+        <Button
+          title={"AsyncStorage 使用"}
+          onPress={() => {
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+            }, "AsynStorageDemoPage")
+          }} />
+        <Button
+          title={"离线缓存框架"}
+          onPress={() => {
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+            }, "DataStoreDemoPage")
+          }} />
+
       </View>
     );
   }
@@ -34,8 +59,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapDispatchToProps=dispatch=>({
-  onThemeChange:theme=>dispatch(actions.onThemeChange(theme))
+const mapDispatchToProps = dispatch => ({
+  onThemeChange: theme => dispatch(actions.onThemeChange(theme))
 })
 
-export default connect(null,mapDispatchToProps)(MinePage)
+export default connect(null, mapDispatchToProps)(MinePage)
