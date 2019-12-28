@@ -6,12 +6,13 @@ import { connect } from 'react-redux';
 import actions from '../action';
 import PopularItem from '../common/PopularItem';
 import Toast from 'react-native-easy-toast'
+import NavigationBar from '../common/NavigationBar';
 
 
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
-const THEME_COLOR = 'red';
+const THEME_COLOR = '#678';
 
 
 
@@ -45,6 +46,17 @@ export default class PopularPage extends Component {
 
   render() {
 
+    let statusBar = {
+      backgroundColor: THEME_COLOR,
+      barStyle: 'light-content',
+    };
+    let navigationBar = <NavigationBar
+      title={'最热'}
+      statusBar={statusBar}
+      style={{ backgroundColor: THEME_COLOR }}
+    />;
+
+
     const TopTabNavigator = createAppContainer(
       createMaterialTopTabNavigator(this._generateTabs(), {
         tabBarOptions: {
@@ -60,6 +72,7 @@ export default class PopularPage extends Component {
 
     return (
       <View style={styles.container}>
+        {navigationBar}
         <TopTabNavigator />
       </View>
     );
@@ -84,7 +97,7 @@ class PopularTab extends Component {
     const store = this._store();
     const url = this.generateFetchUrl(this.storeName);
     if (loadMore) {
-      onLoadMorePopular(this.storeName, ++store.pageIndex, pageSize, store.items, callback => {
+      onLoadMorePopular(this.storeName, store.pageIndex, pageSize, store.items, callback => {
         this.refs.toast.show('没有更多了');
       })
     } else {

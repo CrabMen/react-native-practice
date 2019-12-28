@@ -2,8 +2,8 @@ import React, {PureComponent} from 'react';
 import {StyleSheet, View, Text, Button} from 'react-native';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
-import DynamicTabNavigator from '../Navigator/DynamicTabNavigator';
-import NavigationUtil from '../Navigator/NavigationUtil';
+import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
+import NavigationUtil from '../navigator/NavigationUtil';
 
 class HomePage extends PureComponent {
   constructor(props) {

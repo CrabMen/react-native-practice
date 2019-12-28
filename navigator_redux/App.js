@@ -6,7 +6,7 @@
  * @flow
  */
 import React from 'react';
-import {AppNavigator, BottomTabNavigator} from './js/Navigator/AppNavigator';
+import {AppNavigator, BottomTabNavigator} from './js/navigator/AppNavigator';
 import {createAppContainer} from 'react-navigation';
 import {
   SafeAreaView,

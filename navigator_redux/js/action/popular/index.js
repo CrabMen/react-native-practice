@@ -20,7 +20,7 @@ export function onRefreshPopular(storeName, url, pageSize) {
     }
 }
 
-export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = [], callBack) {
+export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = [], callBack ?:()=>any) {
     return dispatch => {
         setTimeout(() => {//模拟网络请求
             if ((pageIndex - 1) * pageSize >= dataArray.length) {//已加载完全部数据

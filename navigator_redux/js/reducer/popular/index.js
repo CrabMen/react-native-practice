@@ -2,10 +2,10 @@ import Types from '../../action/types';
 const defaultState = {
   // theme: 'red',
 };
-export default function onAction(state = defaultState, action) {
+export default function test(state = defaultState, action) {
   switch (action.type) {
     case Types.POPULAR_REFRESH_SUCCESS:
-      //{type: "POPULAR_REFRESH", storeName: "Java"}
+      console.log(`state参数:${JSON.stringify(state)}\n action参数:${JSON.stringify(action)}`)
       return {
         ...state,
         [action.storeName]: {
