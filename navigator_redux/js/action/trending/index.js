@@ -13,7 +13,7 @@ export function onRefreshTrending(storeName, url, pageSize) {
             .catch(error => {
                 console.log(error);
                 dispatch({
-                    type: Types.TRENDING__REFRESH_FAIL,
+                    type: Types.TRENDING_REFRESH_FAIL,
                     storeName,
                     error
                 });
@@ -29,7 +29,7 @@ export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [
                     callBack('no more')
                 }
                 dispatch({ 
-                    type: Types.TRENDING__LOAD_MORE_FAIL,
+                    type: Types.TRENDING_LOAD_MORE_FAIL,
                     error: 'no more',
                     storeName: storeName,
                     pageIndex: --pageIndex,
@@ -39,7 +39,7 @@ export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [
                 //本次和载入的最大数量
                 let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex;
                 dispatch({
-                    type: Types.TRENDING__LOAD_MORE_SUCCESS,
+                    type: Types.TRENDING_LOAD_MORE_SUCCESS,
                     storeName,
                     pageIndex,
                     projectModes: dataArray.slice(0, max),

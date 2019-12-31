@@ -1,10 +1,10 @@
 
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 import Trending from 'GitHubTrending';
 
-export const FLAG_STORAGE = {flag_popular: 'popular', flag_trending: 'trending'};
+export const FLAG_STORAGE = { flag_popular: 'popular', flag_trending: 'trending' };
 
-export default class DataStore { 
+export default class DataStore {
 
     /**
      * 获取数据，优先获取本地数据，如果无本地数据或本地数据过期则获取网络数据
@@ -109,7 +109,7 @@ export default class DataStore {
     }
 
     _wrapData(data) {
-        return {data: data, timestamp: new Date().getTime()};
+        return { data: data, timestamp: new Date().getTime() };
     }
 
     /**

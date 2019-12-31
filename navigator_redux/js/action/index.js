@@ -7,5 +7,5 @@ export default {
     onRefreshPopular,
     onLoadMorePopular,
     onRefreshTrending,
-    onLoadMoreTrending
+    onLoadMoreTrending,
 }
