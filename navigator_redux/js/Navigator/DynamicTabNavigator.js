@@ -9,6 +9,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator, BottomTabBar } from 'react-navigation-tabs';
 import { connect } from 'react-redux';
+import  {DeviceInfo} from 'react-native';
 const TABS = {
   PopularPage: {
     screen: PopularPage,

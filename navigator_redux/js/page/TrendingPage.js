@@ -1,33 +1,45 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, ActivityIndicator, RefreshControl, Button } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  RefreshControl,
+  Button,
+  TouchableOpacity,
+  DeviceInfo,
+  DeviceEventEmitter,
+} from 'react-native';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer, ThemeColors } from 'react-navigation';
 import { connect } from 'react-redux';
 import actions from '../action';
-import PopularItem from '../common/PopularItem';
+import TrendingItem from '../common/TrendingItem';
 import Toast from 'react-native-easy-toast'
 import NavigationBar from '../common/NavigationBar';
 
-
-
-
+import TrendingDialog, { TimeSpans } from '../common/TrendingDialog';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
 const THEME_COLOR = '#678';
 
-
-
+const EVENT_TYPE_TIME_SPAN_CHANGE = 'EVENT_TYPE_TIME_SPAN_CHANGE';
 
 export default class TrendingPage extends Component {
   constructor(props) {
     super(props);
     this.tabNames = ['All', 'C', 'C#', 'PHP', 'JavaScript'];
+    this.state = {
+      timeSpan: TimeSpans[0],
+    };
   }
   _generateTabs() {
     const tabs = {};
     this.tabNames.forEach((item, index) => {
       tabs[`tab${index}`] = {
-        screen: props => <TrendingTabPage {...props} tabLabel={item} />,
+        screen: props => <TrendingTabPage {...props} timeSpan={this.state.timeSpan} tabLabel={item} />,
         navigationOptions: {
           title: item,
         },
@@ -35,6 +47,66 @@ export default class TrendingPage extends Component {
     });
 
     return tabs;
+  }
+  renderTrendingDialog() {
+    return <TrendingDialog
+      ref={dialog => this.dialog = dialog}
+      onSelect={tab => this.onSelectTimeSpan(tab)}
+    />;
+  }
+
+  onSelectTimeSpan(tab) {
+
+    this.dialog.dismiss()
+    this.setState({
+      timeSpan: tab
+    })
+    DeviceEventEmitter.emit(EVENT_TYPE_TIME_SPAN_CHANGE, tab)
+
+  }
+
+  _renderTitleView() {
+    return <View>
+      <TouchableOpacity
+        underlayColor='transparent'
+        onPress={() => this.dialog.show()}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={{
+            fontSize: 18,
+            color: '#FFFFFF',
+            fontWeight: '400',
+          }}>趋势 {this.state.timeSpan.showText}</Text>
+          <MaterialIcons
+            name={'arrow-drop-down'}
+            size={22}
+            style={{ color: 'white' }}
+          />
+        </View>
+      </TouchableOpacity>
+    </View>;
+
+  }
+
+  _tabNav() {
+
+    if (!this.tabNav) {
+      this.tabNav = createAppContainer(
+        createMaterialTopTabNavigator(this._generateTabs(), {
+          tabBarOptions: {
+            tabStyle: styles.tabStyle,
+            upperCaseLabel: false,
+            scrollEnabled: true,
+            style: {
+              backgroundColor: '#a67',
+              // height:40 
+            },
+            indicatorStyle: styles.indicatorStyle,
+            labelStyle: styles.labelStyle,
+          },
+        }),
+      );
+    }
+    return this.tabNav
   }
 
   render() {
@@ -44,29 +116,17 @@ export default class TrendingPage extends Component {
       barStyle: 'light-content',
     };
     let navigationBar = <NavigationBar
-      title={'趋势'}
+      // title={'趋势'} 
+      titleView={this._renderTitleView()}
       statusBar={statusBar}
       style={{ backgroundColor: THEME_COLOR }}
     />;
-
-
-    const TopTabNavigator = createAppContainer(
-      createMaterialTopTabNavigator(this._generateTabs(), {
-        tabBarOptions: {
-          tabStyle: styles.tabStyle,
-          upperCaseLabel: false,
-          scrollEnabled: true,
-          style: { backgroundColor: '#a67' },
-          indicatorStyle: styles.indicatorStyle,
-          labelStyle: styles.labelStyle,
-        },
-      }),
-    );
-
+    const TopTabNavigator = this._tabNav()
     return (
       <View style={styles.container}>
         {navigationBar}
         <TopTabNavigator />
+        {this.renderTrendingDialog()}
       </View>
     );
   }
@@ -76,12 +136,25 @@ const pageSize = 10;//设为常量，防止修改
 class TrendingTab extends Component {
   constructor(props) {
     super(props)
-    const { tabLabel } = this.props
+    const { timeSpan, tabLabel } = this.props;
+    // this.tabNames = ['PHP'];
+    this.timeSpan = timeSpan;
     this.storeName = tabLabel
   }
 
   componentDidMount() {
     this.loadData()
+    this.timeSpanChangeListener = DeviceEventEmitter.addListener(EVENT_TYPE_TIME_SPAN_CHANGE, (timeSpan) => {
+      this.timeSpan = timeSpan
+      this.loadData()
+    })
+
+  }
+
+  componentWillUnmount() {
+    if (this.timeSpanChangeListener) {
+      this.timeSpanChangeListener.remove()
+    }
 
   }
 
@@ -113,7 +186,7 @@ class TrendingTab extends Component {
   }
 
   generateFetchUrl(key) {
-    return `${URL}${key}${QUERY_STR}`
+    return `${URL}${key}?${this.timeSpan.searchText}`
   }
 
   genIndicator() {
@@ -128,10 +201,10 @@ class TrendingTab extends Component {
 
   renderItem(data) {
     const item = data.item;
-    return <PopularItem
+    return null
+    return <TrendingItem
       item={item}
       onSelect={() => {
-
       }}
     />
   }
@@ -144,7 +217,7 @@ class TrendingTab extends Component {
         <FlatList
           data={store.projectModes}
           renderItem={data => this.renderItem(data)}
-          keyExtractor={item => `${item.id}`}
+          keyExtractor={item => `${item.id}` || item.fullName}
           refreshControl={
             <RefreshControl
               title={'Loading'}
@@ -192,13 +265,14 @@ const TrendingTabPage = connect(mapStateToProps, mapDispatchToProps)(TrendingTab
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 30,
+    marginTop: DeviceInfo.isPhoneX_deprecated ? 30 : 0,
     // justifyContent: 'center',
     // alignItems: 'center',
   },
 
   tabStyle: {
-    minWidth: 50,
+    // minWidth: 50,// fix minWidth 会导致tabStyle初次加载时闪烁s 
+    padding: 0,
   },
 
   indicatorStyle: {
@@ -208,8 +282,9 @@ const styles = StyleSheet.create({
 
   labelStyle: {
     fontSize: 13,
-    marginTop: 6,
-    marginBottom: 6,
+    // marginTop: 6,
+    // marginBottom: 6,
+    margin: 0
   },
   indicatorContainer: {
     alignItems: "center"
@@ -218,6 +293,5 @@ const styles = StyleSheet.create({
     color: 'red',
     margin: 10
   }
-
 
 });

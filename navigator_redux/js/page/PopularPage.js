@@ -7,6 +7,7 @@ import actions from '../action';
 import PopularItem from '../common/PopularItem';
 import Toast from 'react-native-easy-toast'
 import NavigationBar from '../common/NavigationBar';
+import { DeviceInfo } from 'react-native';
 
 
 
@@ -63,7 +64,10 @@ export default class PopularPage extends Component {
           tabStyle: styles.tabStyle,
           upperCaseLabel: false,
           scrollEnabled: true,
-          style: { backgroundColor: '#a67' },
+          style: {
+            backgroundColor: '#a67',
+            // height: 40,//fix 开启scrollEnabled后在Android上初次加载时的闪烁问题
+          },
           indicatorStyle: styles.indicatorStyle,
           labelStyle: styles.labelStyle,
         },
@@ -199,13 +203,14 @@ const PopularTabPage = connect(mapStateToProps, mapDispatchToProps)(PopularTab)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 30,
+    marginTop: DeviceInfo.isPhoneX_deprecated ? 30 : 0,
     // justifyContent: 'center',
     // alignItems: 'center',
   },
 
   tabStyle: {
-    minWidth: 50,
+    // minWidth: 50,// fix minWidth 会导致tabStyle初次加载时闪烁s 
+    padding:0,
   },
 
   indicatorStyle: {
@@ -215,8 +220,9 @@ const styles = StyleSheet.create({
 
   labelStyle: {
     fontSize: 13,
-    marginTop: 6,
-    marginBottom: 6,
+    // marginTop: 6,
+    // marginBottom: 6,
+    margin:0
   },
   indicatorContainer: {
     alignItems: "center"
