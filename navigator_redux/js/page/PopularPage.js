@@ -7,7 +7,7 @@ import actions from '../action';
 import PopularItem from '../common/PopularItem';
 import Toast from 'react-native-easy-toast'
 import NavigationBar from '../common/NavigationBar';
-import { DeviceInfo } from 'react-native';
+import ViewUtil from '../util/ViewUtil';
 
 
 
@@ -116,7 +116,7 @@ class PopularTab extends Component {
       store = {
         items: [],
         isLoading: false,
-        projectModes: [],//要显示的数据
+        projectModels: [],//要显示的数据
         hideLoadingMore: true,//默认隐藏加载更多
       }
     }
@@ -140,9 +140,12 @@ class PopularTab extends Component {
   renderItem(data) {
     const item = data.item;
     return <PopularItem
+      projectModel={data}
       item={item}
       onSelect={() => {
-
+        NavigationUtil.goPage({
+          projectModel: item
+        }, 'DetailPage')
       }}
     />
   }
@@ -153,7 +156,7 @@ class PopularTab extends Component {
     return (
       <View style={styles.container}>
         <FlatList
-          data={store.projectModes}
+          data={store.projectModels}
           renderItem={data => this.renderItem(data)}
           keyExtractor={item => `${item.id}`}
           refreshControl={
