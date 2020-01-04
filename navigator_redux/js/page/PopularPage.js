@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, ActivityIndicator, RefreshControl, Button } from 'react-native';
+import { FlatList, StyleSheet, Text, View, ActivityIndicator, RefreshControl, Button ,DeviceInfo} from 'react-native';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer, ThemeColors } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import PopularItem from '../common/PopularItem';
 import Toast from 'react-native-easy-toast'
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
+import NavigationUtil from '../navigator/NavigationUtil';
 
 
 

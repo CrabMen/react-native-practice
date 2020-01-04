@@ -6,7 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import WebView from 'react-native-webview';
 // import NavigationUtil from '../Navigator/NavigationUtil';
 const TRENDING_URL = 'https://githu.com/'
-const THEME_COLOR = '#a67'
+const THEME_COLOR = '#a68'
 export default class DetailPage extends Component {
 
   constructor(props) {
@@ -28,7 +28,7 @@ export default class DetailPage extends Component {
     if (this.state.canGoBack) {
       this.webView.goBack()
     } else {
-      // NavigationUtil .goBack()
+      NavigationUtil.goBack()
     }
   }
 
@@ -55,6 +55,7 @@ export default class DetailPage extends Component {
   }
   render() {
     const { navigation } = this.props;
+    const titleLayoutStyle = this.state.title.length > 20 ? {paddingRight: 20}:null
     let statusBar = {
       backgroundColor: THEME_COLOR,
       barStyle: 'light-content',
@@ -63,6 +64,7 @@ export default class DetailPage extends Component {
       leftButton={ViewUtil.getLeftBackButton(() => this.onBack())}
       rightButton={this.renderRightButton()}
       title={this.state.title}
+      titleLayoutStyle={titleLayoutStyle}
       statusBar={statusBar}
       style={{ backgroundColor: THEME_COLOR }}
     />;
@@ -84,7 +86,7 @@ export default class DetailPage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
 });
