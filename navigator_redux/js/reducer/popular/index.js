@@ -21,7 +21,7 @@ export default function test(state = defaultState, action) {
       return {
         ...state,
         [action.storeName]: {
-          isLoading: false,
+          isLoading: false, 
         }
       };
 

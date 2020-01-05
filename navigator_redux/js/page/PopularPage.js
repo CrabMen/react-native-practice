@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, ActivityIndicator, RefreshControl, Button ,DeviceInfo} from 'react-native';
+import { FlatList, StyleSheet, Text, View, ActivityIndicator, RefreshControl, Button, DeviceInfo } from 'react-native';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer, ThemeColors } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -9,13 +9,15 @@ import Toast from 'react-native-easy-toast'
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
 import NavigationUtil from '../navigator/NavigationUtil';
-
+import FavoriteDAO from '../expand/FavoriteDAO';
+import { FLAG_STORAGE } from '../expand/DataStore';
+import FavoriteUtil from '../util/FavoriteUtil';
 
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
 const THEME_COLOR = '#678';
-
+const favoriteDao = new FavoriteDAO(FLAG_STORAGE.flag_popular)
 
 
 
@@ -102,11 +104,11 @@ class PopularTab extends Component {
     const store = this._store();
     const url = this.generateFetchUrl(this.storeName);
     if (loadMore) {
-      onLoadMorePopular(this.storeName, store.pageIndex, pageSize, store.items, callback => {
+      onLoadMorePopular(this.storeName, ++store.pageIndex, pageSize, store.items, favoriteDao, callback => {
         this.refs.toast.show('没有更多了');
       })
     } else {
-      onRefreshPopular(this.storeName, url, pageSize)
+      onRefreshPopular(this.storeName, url, pageSize, favoriteDao)
     }
   }
 
@@ -148,6 +150,7 @@ class PopularTab extends Component {
           projectModel: item
         }, 'DetailPage')
       }}
+      onFavorite={(item, isFavorite) => FavoriteUtil.onFavorite(favoriteDao, item, isFavorite, FLAG_STORAGE.flag_popular)}
     />
   }
 
@@ -161,7 +164,7 @@ class PopularTab extends Component {
           renderItem={data => this.renderItem(data)}
           keyExtractor={item => `${item.id}`}
           refreshControl={
-            <RefreshControl
+            <RefreshControl 
               title={'Loading'}
               titleColor={THEME_COLOR}
               colors={[THEME_COLOR]}
@@ -198,8 +201,8 @@ const mapStateToProps = state => ({
   popular: state.popular
 });
 const mapDispatchToProps = dispatch => ({
-  onRefreshPopular: (storeName, url, pageSize) => dispatch(actions.onRefreshPopular(storeName, url, pageSize)),
-  onLoadMorePopular: (storeName, pageIndex, pageSize, items, callBack) => dispatch(actions.onLoadMorePopular(storeName, pageIndex, pageSize, items, callBack)),
+  onRefreshPopular: (storeName, url, pageSize, favoriteDao) => dispatch(actions.onRefreshPopular(storeName, url, pageSize, favoriteDao)),
+  onLoadMorePopular: (storeName, pageIndex, pageSize, items, favoriteDao, callBack) => dispatch(actions.onLoadMorePopular(storeName, pageIndex, pageSize, items, favoriteDao, callBack)),
 });
 const PopularTabPage = connect(mapStateToProps, mapDispatchToProps)(PopularTab)
 
@@ -214,7 +217,7 @@ const styles = StyleSheet.create({
 
   tabStyle: {
     // minWidth: 50,// fix minWidth 会导致tabStyle初次加载时闪烁s 
-    padding:0,
+    padding: 0,
   },
 
   indicatorStyle: {
@@ -226,7 +229,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     // marginTop: 6,
     // marginBottom: 6,
-    margin:0
+    margin: 0
   },
   indicatorContainer: {
     alignItems: "center"

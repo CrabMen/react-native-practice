@@ -1,5 +1,5 @@
 import ProjectModel from "../model/ProjectModel";
-import Util from "../util/Utils";
+import Utils from '../util/Utils';
 
 export function handleData(actionType, dispatch, storeName, data, pageSize, favoriteDAO) {
     let fixItems = [];
@@ -16,7 +16,7 @@ export function handleData(actionType, dispatch, storeName, data, pageSize, favo
         dispatch({
             type: actionType,
             items: fixItems,
-            projectModels: showItems,
+            projectModels: projectModels,
             storeName,
             pageIndex: 1,
         })
@@ -24,21 +24,19 @@ export function handleData(actionType, dispatch, storeName, data, pageSize, favo
 
 }
 //异步转同步
-export async function _projectModels(showItems, favoriteDAO, callback) {
+export async function _projectModels(showItems, favoriteDao, callback) {
     let keys = [];
-
     try {
-        keys = favoriteDAO.getFavoriteKeys();
+        //获取收藏的key
+        keys = await favoriteDao.getFavoriteKeys();
     } catch (e) {
-        console.log(e)
+        console.log(e);
     }
-    let projectModels = []
-    for (let index = 0; index < showItems.length; index++) {
-        projectModels.push(new ProjectModel(showItems[index], Utils.checkFavorite(showItems[index], keys)))
+    let projectModels = [];
+    for (let i = 0, len = showItems.length; i < len; i++) {
+        projectModels.push(new ProjectModel(showItems[i], Utils.checkFavorite(showItems[i], keys)));
     }
-
     if (typeof callback === 'function') {
-        callback(projectModels)
+        callback(projectModels);
     }
-
 }

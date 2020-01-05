@@ -43,7 +43,6 @@ export default class FavoriteDAO {
                 AsyncStorage.setItem(this.favoriteKey, JSON.stringify(favoriteKeys));//将更新后的key集合保存到本地
             }
         });
-
     }
 
     /**

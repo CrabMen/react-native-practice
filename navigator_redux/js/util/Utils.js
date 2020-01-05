@@ -1,17 +1,16 @@
 
 export default class Utils {
-   
+    /**
+     * 检查该Item是否被收藏
+     * **/
     static checkFavorite(item, keys = []) {
-        if (!keys) {
-            return false
-        }
-        for (let index = 0; index < keys.length; index++) {
-            let id = item.id ? item.id : item.fullName
-            if (id.toString() == items[i]) {
-                return true
+        if (!keys) return false;
+        for (let i = 0, len = keys.length; i < len; i++) {
+            let id = item.id ? item.id : item.fullName;
+            if (id.toString() === keys[i]) {
+                return true;
             }
         }
-        return false
+        return false;
     }
 }
-
