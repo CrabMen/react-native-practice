@@ -1,7 +1,7 @@
 import ProjectModel from "../model/ProjectModel";
 import Utils from '../util/Utils';
 
-export function handleData(actionType, dispatch, storeName, data, pageSize, favoriteDAO) {
+export function handleData(actionType, dispatch, storeName, data, pageSize, favoriteDao) {
     let fixItems = [];
     if (data && data.data) {
         if (Array.isArray(data.data)) {
@@ -12,7 +12,7 @@ export function handleData(actionType, dispatch, storeName, data, pageSize, favo
     }
     //第一次要加载的数据
     let showItems = pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize);
-    _projectModels(showItems, favoriteDAO, projectModels => {
+    _projectModels(showItems, favoriteDao, projectModels => {
         dispatch({
             type: actionType,
             items: fixItems,

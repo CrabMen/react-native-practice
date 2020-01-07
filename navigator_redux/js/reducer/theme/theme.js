@@ -13,8 +13,5 @@ export default function onAction(state = defaultState, action) {
       return state;
   }
 
-
-
-
   return state;
 }

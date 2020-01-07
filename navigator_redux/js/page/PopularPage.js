@@ -104,7 +104,7 @@ class PopularTab extends Component {
     const store = this._store();
     const url = this.generateFetchUrl(this.storeName);
     if (loadMore) {
-      onLoadMorePopular(this.storeName, ++store.pageIndex, pageSize, store.items, favoriteDao, callback => {
+      onLoadMorePopular(this.storeName, ++store.pageIndex, pageSize, store.items,favoriteDao, callback => {
         this.refs.toast.show('没有更多了');
       })
     } else {
@@ -143,15 +143,16 @@ class PopularTab extends Component {
   renderItem(data) {
     const item = data.item;
     return <PopularItem
-      projectModel={data}
-      item={item}
-      onSelect={() => {
+      projectModel={item}
+      onSelect={(callback) => {
         NavigationUtil.goPage({
-          projectModel: item
+          projectModel: item,
+          flag: FLAG_STORAGE.flag_popular,
+          callback,
         }, 'DetailPage')
       }}
-      onFavorite={(item, isFavorite) => FavoriteUtil.onFavorite(favoriteDao, item, isFavorite, FLAG_STORAGE.flag_popular)}
-    />
+      onFavorite={(item,isFavorite)=>FavoriteUtil.onFavorite(favoriteDao,item,isFavorite,FLAG_STORAGE.flag_popular)}
+      />
   }
 
   render() {
@@ -162,9 +163,9 @@ class PopularTab extends Component {
         <FlatList
           data={store.projectModels}
           renderItem={data => this.renderItem(data)}
-          keyExtractor={item => `${item.id}`}
+          keyExtractor={item => `${item.item.id}`}
           refreshControl={
-            <RefreshControl 
+            <RefreshControl
               title={'Loading'}
               titleColor={THEME_COLOR}
               colors={[THEME_COLOR]}

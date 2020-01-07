@@ -31,7 +31,7 @@ export default function test(state = defaultState, action) {
         [action.storeName]: {
           ...state[action.storeName],
           projectModels: action.projectModels,
-          hideLoadingMore: false,
+          hideLoadingMore: true,
           pageIndex: action.pageIndex,
         }
       }
@@ -49,6 +49,4 @@ export default function test(state = defaultState, action) {
     default:
       return state;
   }
-
-  return state;
 }
