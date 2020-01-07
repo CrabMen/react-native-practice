@@ -9,7 +9,10 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator, BottomTabBar } from 'react-navigation-tabs';
 import { connect } from 'react-redux';
-import  {DeviceInfo} from 'react-native';
+import { DeviceInfo } from 'react-native';
+import action from '../action';
+import EventBus from 'react-native-event-bus';
+import EventTypes from '../util/EventTypes';
 const TABS = {
   PopularPage: {
     screen: PopularPage,
@@ -20,10 +23,10 @@ const TABS = {
       ),
     },
   },
-  FavoritePage: {
-    screen: FavoritePage,
+  TrendingPage: {
+    screen: TrendingPage,
     navigationOptions: {
-      tabBarLabel: '最爱',
+      tabBarLabel: '趋势',
       tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons
           name={'md-trending-up'}
@@ -34,8 +37,8 @@ const TABS = {
     },
   },
 
-  TrendingPage: {
-    screen: TrendingPage,
+  FavoritePage: {
+    screen: FavoritePage,
     navigationOptions: {
       tabBarLabel: '收藏',
       tabBarIcon: ({ tintColor, focused }) => (
@@ -64,7 +67,7 @@ class DynamicTabNavigator extends React.Component {
     if (this.tabs) { return this.tabs }
     const { PopularPage, TrendingPage, FavoritePage, MinePage } = TABS;
     const tabs = { PopularPage, TrendingPage, FavoritePage, MinePage }; //根据需要定制显示的tab
-    PopularPage.navigationOptions.tabBarLabel = '最热啊'; //动态配置Tab属性
+    PopularPage.navigationOptions.tabBarLabel = '最热'; //动态配置Tab属性
 
     return this.tabs = createAppContainer(
       createBottomTabNavigator(tabs, {
@@ -78,7 +81,16 @@ class DynamicTabNavigator extends React.Component {
 
   render() {
     const Tab = this._tabNavigator();
-    return <Tab />;
+    return <Tab
+      onNavigationStateChange={(prevState, newState, action) => {
+        EventBus.getInstance().fireEvent(EventTypes.bottom_tab_select, {
+          //发送底部tab切换的事件
+          from: prevState.index,
+          to: newState.index,
+        }
+        )
+      }}
+    />;
   }
 }
 

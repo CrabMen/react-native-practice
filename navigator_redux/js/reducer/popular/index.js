@@ -21,7 +21,7 @@ export default function test(state = defaultState, action) {
       return {
         ...state,
         [action.storeName]: {
-          isLoading: false, 
+          isLoading: false,
         }
       };
 
@@ -43,6 +43,24 @@ export default function test(state = defaultState, action) {
           ...state[action.storeName],
           hideLoadingMore: true,
           pageIndex: action.pageIndex,
+        }
+      }
+      
+    case Types.FLUSH_POPULAR_FAVORITE://刷新收藏状态
+      return {
+        ...state,
+        [action.storeName]: {
+          ...state[action.storeName],
+          projectModels: action.projectModels,
+        }
+      }
+
+    case Types.TRENDING_FLUSH_FAVORITE://刷新收藏状态
+      return {
+        ...state,
+        [action.storeName]: {
+          ...state[action.storeName],
+          projectModels: action.projectModels,
         }
       }
 

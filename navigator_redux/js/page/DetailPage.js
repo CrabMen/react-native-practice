@@ -5,6 +5,7 @@ import ViewUtil from '../util/ViewUtil';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import WebView from 'react-native-webview';
 import NavigationUtil from '../navigator/NavigationUtil';
+import FavoriteDAO from '../expand/FavoriteDAO';
 const TRENDING_URL = 'https://githu.com/'
 const THEME_COLOR = '#a68'
 export default class DetailPage extends Component {
@@ -12,9 +13,10 @@ export default class DetailPage extends Component {
   constructor(props) {
     super(props)
     this.params = this.props.navigation.state.params
-    const { projectModel } = this.params
+    const { projectModel,flag} = this.params
     this.url = projectModel.item.html_url || TRENDING_URL + projectModel.item.fullName
     const title = projectModel.item.full_name || projectModel.item.fullName
+    this.favoriteDao = new FavoriteDAO(flag);
 
     this.state = {
       title: title,
@@ -29,15 +31,28 @@ export default class DetailPage extends Component {
     if (this.state.canGoBack) {
       this.webView.goBack()
     } else {
-      NavigationUtil.goBack()
+      NavigationUtil.goBack(this.props.navigation)
     }
   }
-
+  onFavoriteButtonClick() {
+    const { projectModel, callback } = this.params;
+    const isFavorite = projectModel.isFavorite = !projectModel.isFavorite;
+    callback(isFavorite);//更新Item的收藏状态
+    this.setState({
+      isFavorite: isFavorite,
+    });
+    let key = projectModel.item.fullName ? projectModel.item.fullName : projectModel.item.id.toString();
+    if (projectModel.isFavorite) {
+      this.favoriteDao.saveFavoriteItem(key, JSON.stringify(projectModel.item));
+    } else {
+      this.favoriteDao.removeFavoriteItem(key);
+    }
+  }
   renderRightButton() {
     return (
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={() => {
-
+          this.onFavoriteButtonClick()
         }}>
           <FontAwesome name={this.state.isFavorite ? 'star' : 'star-o'}
             size={20} style={{ color: 'white', marginRight: 10 }} />

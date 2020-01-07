@@ -43,12 +43,40 @@ export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = []
                         type: Types.POPULAR_LOAD_MORE_SUCCESS,
                         storeName,
                         pageIndex,
-                        projectModels:data,
+                        projectModels: data,
                     })
-                }) 
+                })
             }
         }, 500);
     }
 }
 
+export function onFlushPopularFavorite(storeName, pageIndex, pageSize, dataArray = [], favoriteDao) {
+    return dispatch => {
+        //本次和载入的最大数量
+        let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex;
+        _projectModels(dataArray.slice(0, max), favoriteDao, data => {
+            dispatch({
+                type: Types.FLUSH_POPULAR_FAVORITE,
+                storeName,
+                pageIndex,
+                projectModels: data,
+            })
+        })
+    }
+}
 
+export function onFlushTrendingFavorite(storeName, pageIndex, pageSize, dataArray = [], favoriteDao) {
+    return dispatch => {
+        //本次和载入的最大数量
+        let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex;
+        _projectModels(dataArray.slice(0, max), favoriteDao, data => {
+            dispatch({
+                type: Types.TRENDING_FLUSH_FAVORITE,
+                storeName,
+                pageIndex,
+                projectModels: data,
+            })
+        })
+    }
+}
