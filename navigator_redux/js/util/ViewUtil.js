@@ -56,7 +56,7 @@ export default class ViewUtil {
                     {Icons && icon ?
                         <Icons
                             name={icon}
-                            size={20}
+                            size={20 }
                             style={{ color: color, marginRight: 10 }}
                         /> :
                         <View style={{ opacity: 1, width: 16, height: 16, marginRight: 10, }} />
