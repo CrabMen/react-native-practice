@@ -10,9 +10,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Toast from 'react-native-easy-toast'
 
 const THEME_COLOR = '#678';
-type Props = {};
 
-export default class AboutMePage extends Component<Props> {
+export default class AboutMePage extends Component {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
