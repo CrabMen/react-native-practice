@@ -7,7 +7,7 @@ import NavigationBar from '../common/NavigationBar';
 import Feather from 'react-native-vector-icons/Feather'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { MORE_MENU } from "../common/MORE_MENU";
-import GlobalStyles from "../res/GlobalStyles";
+import GlobalStyles from "../res/styles/GlobalStyles";
 import ViewUtil from "../util/ViewUtil";
 import { Switch } from 'react-native-gesture-handler';
 import WebViewPage from './WebViewPage';
@@ -47,14 +47,20 @@ class MyPage extends Component {
 
   onClick(menu) {
     let RouteName, params = {}
-
     switch (menu) {
+
       case MORE_MENU.Tutorial:
         RouteName = 'WebViewPage'
         params.title = '教程'
         params.url = 'https://coding.m.imooc.com/classindex.html?cid=89';
         break;
 
+      case MORE_MENU.About:
+        RouteName = 'AboutPage';
+        break;
+      case MORE_MENU.About_Author:
+        RouteName = 'AboutMePage';
+        break;
       default:
         break;
     }
