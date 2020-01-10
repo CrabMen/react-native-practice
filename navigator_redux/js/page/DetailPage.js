@@ -6,7 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import WebView from 'react-native-webview';
 import NavigationUtil from '../navigator/NavigationUtil';
 import FavoriteDAO from '../expand/FavoriteDAO';
-const TRENDING_URL = 'https://githu.com/'
+const TRENDING_URL = 'https://github.com/';
 const THEME_COLOR = '#a68'
 export default class DetailPage extends Component {
 

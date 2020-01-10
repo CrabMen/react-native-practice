@@ -1,7 +1,7 @@
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-import {createStackNavigator} from 'react-navigation-stack';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MinePage from '../page/MinePage';
 import HomePage from '../page/HomePage';
@@ -13,6 +13,9 @@ import DataStoreDemoPage from '../page/DataStoreDemoPage';
 import WebViewPage from '../page/WebViewPage';
 import AboutPage from '../page/about/AboutPage';
 import AboutMePage from '../page/about/AboutMePage';
+import CustomKeyPage from '../page/CustomKeyPage';
+import SortKeyPage from '../page/SortKeyPage';
+import CustomTheme from '../page/CustomTheme';
 
 const InitNavigator = createStackNavigator({
   WelcomePage: {
@@ -36,27 +39,45 @@ const MainNavigator = createStackNavigator({
   DetailPage: {
     screen: DetailPage,
     navigationOptions: {
-        header: null,// 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
+      header: null,// 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
     }
-},
-  FetchDemoPage:FetchDemoPage,
-  WebViewPage :{
-    screen:WebViewPage,
+  },
+  FetchDemoPage: FetchDemoPage,
+  WebViewPage: {
+    screen: WebViewPage,
     navigationOptions: {
       header: null,
     },
   },
-  AboutPage :{
-    screen:AboutPage,
+  AboutPage: {
+    screen: AboutPage,
     navigationOptions: {
       header: null,
     },
   },
-  AboutMePage :{
-    screen:AboutMePage,
+  AboutMePage: {
+    screen: AboutMePage,
     navigationOptions: {
       header: null,
     },
+  },
+  CustomKeyPage: {
+    screen: CustomKeyPage,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  SortKeyPage: {
+    screen: SortKeyPage,
+    navigationOptions: {
+      header: null,// 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
+    }
+  },
+  CustomTheme: {
+    screen: CustomTheme,
+    navigationOptions: {
+      header: null,// 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
+    }
   },
   AsynStorageDemoPage: AsynStorageDemoPage,
   DataStoreDemoPage: DataStoreDemoPage,

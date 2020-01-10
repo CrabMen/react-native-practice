@@ -11,11 +11,13 @@ import GlobalStyles from "../res/styles/GlobalStyles";
 import ViewUtil from "../util/ViewUtil";
 import { Switch } from 'react-native-gesture-handler';
 import WebViewPage from './WebViewPage';
+import { FLAG_LANGUAGE } from '../expand/LanguageDao';
+import actions from "../action";
 
 const THEME_COLOR = '#066';
 
 
-class MyPage extends Component {
+class MinePage extends Component {
   getRightButton() {
     return <View style={{ flexDirection: 'row' }}>
       <TouchableOpacity
@@ -46,9 +48,9 @@ class MyPage extends Component {
   }
 
   onClick(menu) {
-    let RouteName, params = {}
-    switch (menu) {
-
+    const {theme} = this.props;
+    let RouteName, params = {theme};   
+     switch (menu) {
       case MORE_MENU.Tutorial:
         RouteName = 'WebViewPage'
         params.title = '教程'
@@ -58,8 +60,27 @@ class MyPage extends Component {
       case MORE_MENU.About:
         RouteName = 'AboutPage';
         break;
+      case MORE_MENU.Sort_Key:
+        RouteName = 'SortKeyPage';
+        params.flag = FLAG_LANGUAGE.flag_key;
+        break;
+      case MORE_MENU.Sort_Language:
+        RouteName = 'SortKeyPage';
+        params.flag = FLAG_LANGUAGE.flag_language;
+        break;
+      case MORE_MENU.Custom_Key:
+      case MORE_MENU.Custom_Language:
+      case MORE_MENU.Remove_Key:
+        params.isRemoveKey = menu == MORE_MENU.Remove_Key
+        params.flag = menu != MORE_MENU.Custom_Language ? FLAG_LANGUAGE.flag_key : FLAG_LANGUAGE.flag_language
+        RouteName = 'CustomKeyPage';
+        break;
       case MORE_MENU.About_Author:
         RouteName = 'AboutMePage';
+        break;
+      case MORE_MENU.Custom_Theme:
+        const { onShowCustomThemeView } = this.props;
+        onShowCustomThemeView(true);
         break;
       default:
         break;
@@ -160,13 +181,16 @@ class MyPage extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
-
-const mapDispatchToProps = dispatch => ({
-  onThemeChange: (theme) => dispatch(onThemeChange(theme)),
+const mapStateToProps = state => ({
+  theme: state.theme.theme,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyPage);
+const mapDispatchToProps = dispatch => ({
+  onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MinePage);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
