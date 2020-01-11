@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, ActivityIndicator, RefreshControl, Button, DeviceInfo } from 'react-native';
+import {TouchableOpacity, FlatList, StyleSheet, Text, View, ActivityIndicator, RefreshControl, Button, DeviceInfo } from 'react-native';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer, ThemeColors } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -15,7 +15,7 @@ import FavoriteUtil from '../util/FavoriteUtil';
 import EventBus from 'react-native-event-bus';
 import EventTypes from '../util/EventTypes';
 import { FLAG_LANGUAGE } from '../expand/LanguageDao';
-
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
@@ -46,7 +46,7 @@ class PopularPage extends Component {
   _generateTabs() {
     const tabs = {};
     const { keys, theme } = this.props
-    console.log('所有的标签' + JSON.stringify(keys))
+    console.log('所有的标签'+JSON.stringify(keys))
     this.preKeys = keys
     keys.forEach((item, index) => {
       if (item.checked) {
@@ -62,6 +62,28 @@ class PopularPage extends Component {
     return tabs;
   }
 
+
+  renderRightButton() {
+    const { theme } = this.props;
+    return <TouchableOpacity
+      onPress={() => {
+        NavigationUtil.goPage({ theme }, 'SearchPage')
+      }}
+    >
+      <View style={{ padding: 5, marginRight: 8 }}>
+        <Ionicons
+          name={'ios-search'}
+          size={24}
+          style={{
+            marginRight: 8,
+            alignSelf: 'center',
+            color: 'white',
+          }} />
+      </View>
+    </TouchableOpacity>
+  }
+
+
   render() {
     const { keys, theme } = this.props
     let statusBar = {
@@ -72,6 +94,7 @@ class PopularPage extends Component {
       title={'最热'}
       statusBar={statusBar}
       style={{ backgroundColor: theme.themeColor }}
+      rightButton={this.renderRightButton()}
     />;
 
 
@@ -184,7 +207,7 @@ class PopularTab extends Component {
 
   renderItem(data) {
     const item = data.item;
-    const {theme} = this.props
+    const { theme } = this.props
     return <PopularItem
       theme={theme}
       projectModel={item}
@@ -202,7 +225,7 @@ class PopularTab extends Component {
 
   render() {
     let store = this._store();
-    let {theme} = this.props
+    let { theme } = this.props
     return (
       <View style={styles.container}>
         <FlatList
