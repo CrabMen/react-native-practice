@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
-import {StyleSheet, ActivityIndicator, Text, View, FlatList, RefreshControl} from 'react-native';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { StyleSheet, ActivityIndicator, Text, View, FlatList, RefreshControl } from 'react-native';
+import { connect } from 'react-redux';
 import actions from '../action/index'
-import {createMaterialTopTabNavigator,} from "react-navigation-tabs";
+import { createMaterialTopTabNavigator, } from "react-navigation-tabs";
 import NavigationUtil from '../navigator/NavigationUtil'
 import PopularItem from '../common/PopularItem'
 import Toast from 'react-native-easy-toast'
 import NavigationBar from '../common/NavigationBar';
-import {DeviceInfo} from 'react-native';
+import { DeviceInfo } from 'react-native';
 import FavoriteDao from "../expand/FavoriteDAO";
-import {FLAG_STORAGE} from "../expand/DataStore";
+import { FLAG_STORAGE } from "../expand/DataStore";
 import FavoriteUtil from "../util/FavoriteUtil";
 import TrendingItem from "../common/TrendingItem";
 import EventBus from "react-native-event-bus";
@@ -21,7 +21,7 @@ const QUERY_STR = '&sort=stars';
 const THEME_COLOR = '#678';
 const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
 type Props = {};
-export default class FavoritePage extends Component<Props> {
+class FavoritePage extends Component<Props> {
     constructor(props) {
         super(props);
         console.log(NavigationUtil.navigation)
@@ -31,54 +31,63 @@ export default class FavoritePage extends Component<Props> {
 
 
     render() {
+        const { theme } = this.props;
         let statusBar = {
-            backgroundColor: THEME_COLOR,
+            backgroundColor: theme.themeColor,
             barStyle: 'light-content',
         };
         let navigationBar = <NavigationBar
             title={'收藏'}
             statusBar={statusBar}
-            style={{backgroundColor: THEME_COLOR}}
+            style={theme.styles.navBar}
         />;
-        const TabNavigator =  createAppContainer(
+        const TabNavigator = createAppContainer(
             createMaterialTopTabNavigator({
                 'Popular': {
-                    screen: props => <FavoriteTabPage {...props} flag={FLAG_STORAGE.flag_popular}/>,//初始化Component时携带默认参数 @https://github.com/react-navigation/react-navigation/issues/2392
+                    screen: props => <FavoriteTabPage {...props} theme={theme} flag={FLAG_STORAGE.flag_popular} />,//初始化Component时携带默认参数 @https://github.com/react-navigation/react-navigation/issues/2392
                     navigationOptions: {
                         title: '最热',
                     },
                 },
                 'Trending': {
-                    screen: props => <FavoriteTabPage {...props} flag={FLAG_STORAGE.flag_trending}/>,//初始化Component时携带默认参数 @https://github.com/react-navigation/react-navigation/issues/2392
+                    screen: props => <FavoriteTabPage {...props} theme={theme} flag={FLAG_STORAGE.flag_trending} />,//初始化Component时携带默认参数 @https://github.com/react-navigation/react-navigation/issues/2392
                     navigationOptions: {
                         title: '趋势',
                     },
                 },
-                }, {
-                    tabBarOptions: {
-                        tabStyle: styles.tabStyle,
-                        upperCaseLabel: false,//是否使标签大写，默认为true
-                        scrollEnabled:false,
-                        style: { 
-                            backgroundColor: '#678',//TabBar 的背景颜色
-                            // height: 30//fix 开启scrollEnabled后再Android上初次加载时闪烁问题
-                        },
-                        indicatorStyle: styles.indicatorStyle,//标签指示器的样式
-                        labelStyle: styles.labelStyle,//文字的样式
-                    }
+            }, {
+                tabBarOptions: {
+                    tabStyle: styles.tabStyle,
+                    upperCaseLabel: false,//是否使标签大写，默认为true
+                    scrollEnabled: false,
+                    style: {
+                        backgroundColor: theme.themeColor,//TabBar 的背景颜色
+                        // height: 30//fix 开启scrollEnabled后再Android上初次加载时闪烁问题
+                    },
+                    indicatorStyle: styles.indicatorStyle,//标签指示器的样式
+                    labelStyle: styles.labelStyle,//文字的样式
                 }
+            }
             )
-        ) 
-        return <View style={{flex: 1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0}}>
+        )
+        return <View style={{ flex: 1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0 }}>
             {navigationBar}
-            <TabNavigator/>
+            <TabNavigator />
         </View>
     }
 }
+
+const mapFavoriteStateToProps = state => ({
+    theme: state.theme.theme,
+});
+//注意：connect只是个function，并不应定非要放在export后面
+export default connect(mapFavoriteStateToProps)(FavoritePage);
+
+
 class FavoriteTab extends Component<Props> {
     constructor(props) {
         super(props);
-        const {flag} = this.props;
+        const { flag } = this.props;
         this.storeName = flag;
         this.favoriteDao = new FavoriteDao(flag);
     }
@@ -97,7 +106,7 @@ class FavoriteTab extends Component<Props> {
     }
 
     loadData(isShowLoading) {
-        const {onLoadFavoriteData} = this.props;
+        const { onLoadFavoriteData } = this.props;
         onLoadFavoriteData(this.storeName, isShowLoading)
     }
 
@@ -107,7 +116,7 @@ class FavoriteTab extends Component<Props> {
      * @private
      */
     _store() {
-        const {favorite} = this.props;
+        const { favorite } = this.props;
         let store = favorite[this.storeName];
         if (!store) {
             store = {
@@ -128,23 +137,28 @@ class FavoriteTab extends Component<Props> {
     }
 
     renderItem(data) {
+        const { theme } = this.props
         const item = data.item;
         const Item = this.storeName === FLAG_STORAGE.flag_popular ? PopularItem : TrendingItem;
         return <Item
+            theme={theme}
             projectModel={item}
             onSelect={(callback) => {
                 NavigationUtil.goPage({
+                    theme,
                     projectModel: item,
-                    flag:this.storeName,
+                    flag: this.storeName,
                     callback,
                 }, 'DetailPage')
             }}
-            onFavorite={(item,isFavorite)=>this.onFavorite(item,isFavorite)}
+            onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}
         />
     }
 
     render() {
         let store = this._store();
+        const { theme } = this.props
+
         return (
             <View style={styles.container}>
                 <FlatList
@@ -154,16 +168,16 @@ class FavoriteTab extends Component<Props> {
                     refreshControl={
                         <RefreshControl
                             title={'Loading'}
-                            titleColor={THEME_COLOR}
-                            colors={[THEME_COLOR]}
+                            titleColor={theme.themeColor}
+                            colors={[theme.themeColor]}
                             refreshing={store.isLoading}
                             onRefresh={() => this.loadData(true)}
-                            tintColor={THEME_COLOR}
+                            tintColor={theme.themeColor}
                         />
                     }
                 />
                 <Toast ref={'toast'}
-                       position={'center'}
+                    position={'center'}
                 />
             </View>
         );
@@ -180,41 +194,41 @@ const mapDispatchToProps = dispatch => ({
     onLoadFavoriteData: (storeName, isShowLoading) => dispatch(actions.onLoadFavoriteData(storeName, isShowLoading)),
 });
 
+
 //注意：connect只是个function，并不应定非要放在export后面
 const FavoriteTabPage = connect(mapStateToProps, mapDispatchToProps)(FavoriteTab);
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      marginTop: DeviceInfo.isPhoneX_deprecated ? 30 : 0,
-      // justifyContent: 'center',
-      // alignItems: 'center',
+        flex: 1,
+        marginTop: DeviceInfo.isPhoneX_deprecated ? 30 : 0,
+        // justifyContent: 'center',
+        // alignItems: 'center',
     },
-  
+
     tabStyle: {
-      // minWidth: 50,// fix minWidth 会导致tabStyle初次加载时闪烁s 
-      padding: 0,
+        // minWidth: 50,// fix minWidth 会导致tabStyle初次加载时闪烁s 
+        padding: 0,
     },
-  
+
     indicatorStyle: {
-      height: 2,
-      backgroundColor: 'white',
+        height: 2,
+        backgroundColor: 'white',
     },
-  
+
     labelStyle: {
-      fontSize: 13,
-      // marginTop: 6,
-      // marginBottom: 6,
-      margin: 0
+        fontSize: 13,
+        // marginTop: 6,
+        // marginBottom: 6,
+        margin: 0
     },
     indicatorContainer: {
-      alignItems: "center"
+        alignItems: "center"
     },
     indicator: {
-      color: 'red',
-      margin: 10
+        color: 'red',
+        margin: 10
     }
-  
-  
-  });
-  
+
+
+});

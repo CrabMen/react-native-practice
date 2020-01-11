@@ -79,7 +79,7 @@ class MinePage extends Component {
         RouteName = 'AboutMePage';
         break;
       case MORE_MENU.Custom_Theme:
-        const { onShowCustomThemeView } = this.props;
+        const {onShowCustomThemeView} = this.props;
         onShowCustomThemeView(true);
         break;
       default:
@@ -97,19 +97,23 @@ class MinePage extends Component {
   }
 
   getItem(menu) {
-    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR);
+    const {theme} = this.props
+    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, theme.themeColor);
   }
 
   render() {
+
+    const {theme} = this.props
+
     let statusBar = {
-      backgroundColor: THEME_COLOR,
+      backgroundColor: theme.themeColor,
       barStyle: 'light-content',
     };
     let navigationBar =
       <NavigationBar
         title={'我的'}
         statusBar={statusBar}
-        style={{ backgroundColor: THEME_COLOR }}
+        style={{ backgroundColor: theme.themeColor }}
         rightButton={this.getRightButton()}
       // leftButton={this.getLeftButton()}
       />;
@@ -128,7 +132,7 @@ class MinePage extends Component {
                   size={40}
                   style={{
                     marginRight: 10,
-                    color: THEME_COLOR
+                    color: theme.themeColor
                   }}
                 />
                 <Text>GitHub Popular</Text>
@@ -139,7 +143,7 @@ class MinePage extends Component {
                 style={{
                   marginRight: 10,
                   alignSelf: 'center',
-                  color: THEME_COLOR,
+                  color: theme.themeColor,
                 }} />
             </TouchableOpacity>
           </React.Fragment>

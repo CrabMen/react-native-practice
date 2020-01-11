@@ -1,24 +1,26 @@
-import React, {Component} from 'react';
-import {Alert, ScrollView, StyleSheet, View} from 'react-native';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { connect } from 'react-redux';
 import actions from '../action/index'
 import NavigationUtil from '../navigator/NavigationUtil'
 import NavigationBar from '../common/NavigationBar';
-import LanguageDao, {FLAG_LANGUAGE} from "../expand/LanguageDao";
+import LanguageDao, { FLAG_LANGUAGE } from "../expand/LanguageDao";
 import BackPressComponent from "../common/BackPressComponent";
 import ViewUtil from "../util/ViewUtil";
 import CheckBox from 'react-native-check-box'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import ArrayUtil from "../util/ArrayUtil";
+// import ThemeFactory,{ThemeFlags} from '../res/styles/ThemeFactory';
 
-const THEME_COLOR = '#890';
+
+// const THEME_COLOR = '#890';
 type Props = {};
 
 class CustomKeyPage extends Component<Props> {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
-        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
+        this.backPress = new BackPressComponent({ backPress: (e) => this.onBackPress(e) });
         this.changeValues = [];
         // 
         this.isRemoveKey = !!this.params.isRemoveKey;
@@ -41,7 +43,7 @@ class CustomKeyPage extends Component<Props> {
         this.backPress.componentDidMount();
         //如果props中标签为空则从本地存储中获取标签
         if (CustomKeyPage._keys(this.props).length === 0) {
-            let {onLoadLanguage} = this.props;
+            let { onLoadLanguage } = this.props;
             onLoadLanguage(this.params.flag);
         }
         this.setState({
@@ -62,7 +64,7 @@ class CustomKeyPage extends Component<Props> {
      * @private
      */
     static _keys(props, original, state) {
-        const {flag, isRemoveKey} = props.navigation.state.params;
+        const { flag, isRemoveKey } = props.navigation.state.params;
         let key = flag === FLAG_LANGUAGE.flag_key ? "keys" : "languages";
         if (isRemoveKey && !original) {
             //如果state中的keys为空则从props中取
@@ -95,7 +97,7 @@ class CustomKeyPage extends Component<Props> {
         }
         //更新本地数据
         this.languageDao.save(keys || this.state.keys);
-        const {onLoadLanguage} = this.props;
+        const { onLoadLanguage } = this.props;
         //更新store
         onLoadLanguage(this.params.flag);
         NavigationUtil.goBack(this.props.navigation);
@@ -113,7 +115,7 @@ class CustomKeyPage extends Component<Props> {
                         {this.renderCheckBox(dataArray[i], i)}
                         {i + 1 < len && this.renderCheckBox(dataArray[i + 1], i + 1)}
                     </View>
-                    <View style={styles.line}/>
+                    <View style={styles.line} />
                 </View>
             )
         }
@@ -138,10 +140,10 @@ class CustomKeyPage extends Component<Props> {
                             NavigationUtil.goBack(this.props.navigation)
                         }
                     }, {
-                    text: '是', onPress: () => {
-                        this.onSave();
+                        text: '是', onPress: () => {
+                            this.onSave();
+                        }
                     }
-                }
                 ])
         } else {
             NavigationUtil.goBack(this.props.navigation)
@@ -149,17 +151,18 @@ class CustomKeyPage extends Component<Props> {
     }
 
     _checkedImage(checked) {
+        const { theme } = this.params
         return <Ionicons
             name={checked ? 'ios-checkbox' : 'md-square-outline'}
             size={20}
             style={{
-                color: THEME_COLOR,
-            }}/>
+                color: theme.themeColor,
+            }} />
     }
 
     renderCheckBox(data, index) {
         return <CheckBox
-            style={{flex: 1, padding: 10}}
+            style={{ flex: 1, padding: 10 }}
             onClick={() => this.onClick(data, index)}
             isChecked={data.checked}
             leftText={data.name}
@@ -169,13 +172,16 @@ class CustomKeyPage extends Component<Props> {
     }
 
     render() {
+
+        const { theme } = this.params
+
         let title = this.isRemoveKey ? '标签移除' : '自定义标签';
         title = this.params.flag === FLAG_LANGUAGE.flag_language ? '自定义语言' : title;
         let rightButtonTitle = this.isRemoveKey ? '移除' : '保存';
         let navigationBar = <NavigationBar
             title={title}
             leftButton={ViewUtil.getLeftBackButton(() => this.onBack())}
-            style={{backgroundColor: THEME_COLOR}}
+            style={theme.styles.navBar}
             rightButton={ViewUtil.getRightButton(rightButtonTitle, () => this.onSave())}
         />;
         return <View style={styles.container}>

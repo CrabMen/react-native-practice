@@ -19,6 +19,4 @@ export default function onAction(state = defaultState, action) {
     default:
       return state;
   }
-
-  return state;
 }
