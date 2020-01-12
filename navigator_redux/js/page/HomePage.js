@@ -22,9 +22,9 @@ class HomePage extends PureComponent {
 
   componentDidMount() {
     // this.backPress.componentDidMount()
-    AppState.addEventListener("change", (newState) => {
-      newState === "active" && codePush.sync();
-  });
+  //   AppState.addEventListener("change", (newState) => {
+  //     newState === "active" && codePush.sync();
+  // });
   }
 
   componentWillUnmount() {
