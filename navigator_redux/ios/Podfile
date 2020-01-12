@@ -37,6 +37,8 @@ target 'navigator_redux' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  pod 'CodePush', :path => '../node_modules/react-native-code-push'
+
   target 'navigator_reduxTests' do
     inherit! :search_paths
     # Pods for testing
